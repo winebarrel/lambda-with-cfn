@@ -1,0 +1,33 @@
+{
+  "Parameters": {
+    "StackName": {
+      "Type": "String"
+    },
+    "Region": {
+      "Type": "String",
+      "Default": "ap-northeast-1"
+    }
+  },
+  "Resources": {
+    "Instance": {
+      "Type": "AWS::EC2::Instance",
+      "Properties": {
+        "ImageId": "ami-cbf90ecb",
+        "InstanceType": "t2.micro",
+        "SubnetId": "subnet-XXXXXXXX",
+        "IamInstanceProfile": "my_role",
+        "UserData": {
+          "Fn::Base64": {
+            "Fn::Join": [
+              "",
+              [
+                "#!/bin/bash\n",
+                "aws cloudformation delete-stack --stack-name ", { "Ref": "StackName" }, " --region ", { "Ref": "Region" }, "\n"
+              ]
+            ]
+          }
+        }
+      }
+    }
+  }
+}
